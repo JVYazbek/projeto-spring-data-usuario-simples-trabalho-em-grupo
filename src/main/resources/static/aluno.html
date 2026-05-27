@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Área do Aluno</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#b3003b;
+            min-height:100vh;
+            color:#5c001f;
+        }
+
+        header{
+            background:#5c001f;
+            color:white;
+            padding:25px 60px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        header img{
+            width:120px;
+        }
+
+        header button{
+            padding:12px 25px;
+            border-radius:25px;
+            border:2px solid white;
+            background:transparent;
+            color:white;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .container{
+            padding:50px;
+        }
+
+        h1{
+            color:white;
+            font-size:42px;
+            margin-bottom:10px;
+        }
+
+        .subtitulo{
+            color:#ffe5ee;
+            margin-bottom:40px;
+            font-size:20px;
+        }
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap:25px;
+        }
+
+        .card{
+            background:#ffe5ee;
+            border-radius:20px;
+            padding:30px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.25);
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+        }
+
+        .card h2{
+            color:#5c001f;
+            margin-bottom:15px;
+        }
+
+        .card p{
+            color:#333;
+            line-height:1.5;
+        }
+
+        .certificado{
+            display:none;
+            margin-top:40px;
+            background:#fff;
+            border-radius:20px;
+            padding:50px;
+            text-align:center;
+            box-shadow:0 10px 30px rgba(0,0,0,0.3);
+            border:8px solid #5c001f;
+        }
+
+        .certificado img{
+            width:140px;
+            margin-bottom:20px;
+        }
+
+        .certificado h2{
+            font-size:36px;
+            color:#b3003b;
+            margin-bottom:20px;
+        }
+
+        .certificado p{
+            font-size:20px;
+            margin-bottom:15px;
+        }
+
+        .nomeAluno{
+            font-size:30px;
+            font-weight:bold;
+            color:#5c001f;
+            margin:20px 0;
+        }
+
+        .materiaCertificado{
+            font-size:28px;
+            color:#b3003b;
+            font-weight:bold;
+        }
+
+        .assinatura{
+            margin-top:40px;
+            border-top:2px solid #5c001f;
+            width:300px;
+            margin-left:auto;
+            margin-right:auto;
+            padding-top:10px;
+        }
+
+        @media(max-width:900px){
+            .cards{
+                grid-template-columns:1fr;
+            }
+
+            header{
+                flex-direction:column;
+                gap:20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="img.png" alt="Logo ESPM">
+
+    <button onclick="logout()">SAIR</button>
+</header>
+
+<div class="container">
+
+    <h1>Área do Aluno</h1>
+    <p class="subtitulo">Escolha uma matéria para visualizar seu certificado de aprovação.</p>
+
+    <div class="cards">
+
+        <div class="card" onclick="mostrarCertificado('Engenharia de Software')">
+            <h2>Engenharia de Software</h2>
+            <p>Aprenda análise, projeto, requisitos, documentação e desenvolvimento de sistemas.</p>
+        </div>
+
+        <div class="card" onclick="mostrarCertificado('Python')">
+            <h2>Python</h2>
+            <p>Estude lógica de programação, estruturas, funções e aplicações práticas com Python.</p>
+        </div>
+
+        <div class="card" onclick="mostrarCertificado('SQL')">
+            <h2>SQL</h2>
+            <p>Aprenda banco de dados, consultas, tabelas, filtros e manipulação de dados.</p>
+        </div>
+
+    </div>
+
+    <div class="certificado" id="certificado">
+
+        <img src="img.png" alt="Logo ESPM">
+
+        <h2>Certificado de Aprovação</h2>
+
+        <p>Certificamos que o aluno</p>
+
+        <div class="nomeAluno" id="nomeAluno">Aluno</div>
+
+        <p>foi aprovado com sucesso na matéria</p>
+
+        <div class="materiaCertificado" id="materiaCertificado"></div>
+
+        <p>com excelente desempenho acadêmico.</p>
+
+        <div class="assinatura">
+            Coordenação Acadêmica ESPM
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+    if (!usuarioLogado || usuarioLogado.tipo !== "ALUNO") {
+        alert("Acesso negado!");
+        window.location.href = "index.html";
+    }
+
+    function mostrarCertificado(materia) {
+        document.getElementById("certificado").style.display = "block";
+        document.getElementById("nomeAluno").innerText = usuarioLogado.nome;
+        document.getElementById("materiaCertificado").innerText = materia;
+
+        document.getElementById("certificado").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+    function logout() {
+        localStorage.removeItem("usuarioLogado");
+        window.location.href = "index.html";
+    }
+</script>
+
+</body>
+</html>

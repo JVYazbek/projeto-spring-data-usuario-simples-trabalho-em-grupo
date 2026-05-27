@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres-gamificacao
+    environment:
+      POSTGRES_DB: gamificacao
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-gamificacao
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin.html@admin.html.com
+      PGADMIN_DEFAULT_PASSWORD: admin.html
+    ports:
+      - "5050:80"
