@@ -59,4 +59,16 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Column
+    private String tipo;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
 }
