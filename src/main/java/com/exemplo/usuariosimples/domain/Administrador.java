@@ -1,31 +1,39 @@
 package com.exemplo.usuariosimples.domain;
 
-public class Administrador extends Usuario {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "administradores")
+public class Administrador {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+
+    private String email;
 
     public Administrador() {
     }
 
-    public Administrador(String nome, String email) {
-        super(nome, email);
+    public Long getId() {
+        return id;
     }
 
-    public void aprovarCurso() {
-        System.out.println("Curso aprovado");
+    public String getNome() {
+        return nome;
     }
 
-    public void reprovarCurso() {
-        System.out.println("Curso reprovado");
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public void alterarModeloCobranca() {
-        System.out.println("Modelo de cobrança alterado");
+    public String getEmail() {
+        return email;
     }
 
-    public void monitorarAcessos() {
-        System.out.println("Monitorando acessos");
-    }
-
-    public void gerenciarUsuarios() {
-        System.out.println("Gerenciando usuários");
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro ESPM</title>
 
     <style>
+
         *{
             margin:0;
             padding:0;
             box-sizing:border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family:Arial, Helvetica, sans-serif;
         }
 
         body{
@@ -23,7 +26,7 @@
 
         .container{
             width:900px;
-            height:540px;
+            height:550px;
             background:white;
             border-radius:20px;
             overflow:hidden;
@@ -41,9 +44,12 @@
             justify-content:center;
         }
 
-        .left img{
-            width:180px;
+        .logo{
             margin-bottom:40px;
+        }
+
+        .logo img{
+            width:180px;
         }
 
         .left h2{
@@ -73,7 +79,7 @@
 
         .form-box h1{
             color:#5c001f;
-            font-size:38px;
+            font-size:40px;
             margin-bottom:10px;
         }
 
@@ -86,7 +92,8 @@
             margin-bottom:20px;
         }
 
-        input, select{
+        .input-group input,
+        .input-group select{
             width:100%;
             padding:15px;
             border:none;
@@ -106,7 +113,7 @@
             color:white;
             font-size:18px;
             cursor:pointer;
-            margin-top:10px;
+            transition:0.3s;
         }
 
         .btn:hover{
@@ -114,12 +121,19 @@
         }
 
         .voltar{
-            margin-top:20px;
+            margin-top:22px;
             color:#5c001f;
             cursor:pointer;
             font-weight:bold;
+            font-size:16px;
         }
+
+        .voltar:hover{
+            text-decoration:underline;
+        }
+
     </style>
+
 </head>
 
 <body>
@@ -127,13 +141,17 @@
 <div class="container">
 
     <div class="left">
-        <img src="img.png" alt="Logo ESPM">
+
+        <div class="logo">
+            <img src="img.png" alt="Logo ESPM">
+        </div>
 
         <h2>Cadastro</h2>
 
         <p>
-            Crie um novo usuário para acessar o portal acadêmico.
+            Crie uma nova conta para acessar o portal acadêmico.
         </p>
+
     </div>
 
     <div class="right">
@@ -142,25 +160,52 @@
 
             <h1>Criar conta</h1>
 
-            <p>Preencha os dados abaixo</p>
+            <p>
+                Preencha os dados abaixo
+            </p>
 
             <form onsubmit="cadastrar(event)">
 
                 <div class="input-group">
-                    <input id="nome" type="text" placeholder="Nome" required>
+                    <input
+                            id="nome"
+                            type="text"
+                            placeholder="Nome"
+                            required
+                    >
                 </div>
 
                 <div class="input-group">
-                    <input id="email" type="email" placeholder="Email" required>
+                    <input
+                            id="email"
+                            type="email"
+                            placeholder="Email"
+                            required
+                    >
                 </div>
 
                 <div class="input-group">
+
                     <select id="tipo" required>
-                        <option value="">Selecione o tipo</option>
-                        <option value="ALUNO">Aluno</option>
-                        <option value="PROFESSOR">Professor</option>
-                        <option value="ADMIN">Administrador</option>
+
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <option value="ALUNO">
+                            Aluno
+                        </option>
+
+                        <option value="PROFESSOR">
+                            Professor
+                        </option>
+
+                        <option value="ADMIN">
+                            Administrador
+                        </option>
+
                     </select>
+
                 </div>
 
                 <button type="submit" class="btn">
@@ -169,8 +214,11 @@
 
             </form>
 
-            <div class="voltar" onclick="window.location.href='index.html'">
+            <div class="voltar"
+                 onclick="window.location.href='index.html'">
+
                 Voltar para login
+
             </div>
 
         </div>
@@ -180,33 +228,52 @@
 </div>
 
 <script>
+
     async function cadastrar(event) {
+
         event.preventDefault();
 
         const nome = document.getElementById("nome").value;
         const email = document.getElementById("email").value;
         const tipo = document.getElementById("tipo").value;
 
-        const resposta = await fetch("/usuarios", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nome: nome,
-                email: email,
-                tipo: tipo
-            })
-        });
+        try {
 
-        if (resposta.ok) {
+            const resposta = await fetch("/usuarios", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    nome: nome,
+                    email: email,
+                    tipo: tipo
+                })
+            });
+
+            if (!resposta.ok) {
+
+                alert("Erro ao cadastrar usuário!");
+                return;
+            }
+
             alert("Usuário cadastrado com sucesso!");
+
             window.location.href = "index.html";
-        } else {
-            alert("Erro ao cadastrar usuário. Verifique se o email já existe.");
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            alert("Erro ao conectar com o servidor.");
         }
     }
+
 </script>
 
 </body>
+
 </html>

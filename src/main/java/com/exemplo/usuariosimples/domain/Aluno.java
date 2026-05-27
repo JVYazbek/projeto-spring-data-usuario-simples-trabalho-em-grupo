@@ -1,32 +1,39 @@
 package com.exemplo.usuariosimples.domain;
 
-public class Aluno extends Usuario {
+import jakarta.persistence.*;
 
-    private double nota;
-    private String plano;
+@Entity
+@Table(name = "alunos")
+public class Aluno {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String nome;
+
+    private String email;
 
     public Aluno() {
     }
 
-    public Aluno(String nome, String email, double nota, String plano) {
-        super(nome, email);
-        this.nota = nota;
-        this.plano = plano;
+    public Long getId() {
+        return id;
     }
 
-    public double getNota() {
-        return nota;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNota(double nota) {
-        this.nota = nota;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getPlano() {
-        return plano;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPlano(String plano) {
-        this.plano = plano;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

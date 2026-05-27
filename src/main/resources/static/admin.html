@@ -5,47 +5,36 @@
     <title>Área do Administrador</title>
 
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:Arial, Helvetica, sans-serif;}
 
         body{
             background:#b3003b;
             min-height:100vh;
-            color:#5c001f;
         }
 
         header{
             background:#5c001f;
-            color:white;
-            padding:25px 60px;
+            padding:20px 50px;
             display:flex;
             justify-content:space-between;
             align-items:center;
         }
 
-        header img{
-            width:120px;
-        }
+        header img{width:140px;}
 
-        header button{
+        .logout{
             padding:12px 25px;
-            border-radius:25px;
-            border:2px solid white;
-            background:transparent;
-            color:white;
-            cursor:pointer;
+            border:none;
+            border-radius:30px;
+            background:white;
+            color:#5c001f;
             font-weight:bold;
+            cursor:pointer;
         }
 
-        .container{
-            padding:50px;
-        }
+        .container{padding:50px;}
 
-        h1{
+        .titulo{
             color:white;
             font-size:42px;
             margin-bottom:10px;
@@ -54,115 +43,87 @@
         .subtitulo{
             color:#ffe5ee;
             margin-bottom:40px;
-            font-size:20px;
+            font-size:18px;
         }
 
         .cards{
             display:grid;
-            grid-template-columns:repeat(3, 1fr);
+            grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
             gap:25px;
             margin-bottom:40px;
         }
 
-        .card{
-            background:#ffe5ee;
+        .card, .painel{
+            background:white;
             border-radius:20px;
             padding:30px;
-            box-shadow:0 10px 25px rgba(0,0,0,0.25);
-            text-align:center;
+            box-shadow:0 10px 20px rgba(0,0,0,0.2);
         }
 
-        .card h2{
+        .card{text-align:center;}
+
+        .card h2, .painel h2{
             color:#5c001f;
-            font-size:22px;
             margin-bottom:15px;
         }
 
         .card p{
             font-size:38px;
+            color:#b3003b;
             font-weight:bold;
-            color:#b3003b;
         }
 
-        .painel{
-            background:white;
-            border-radius:20px;
-            padding:40px;
-            box-shadow:0 10px 30px rgba(0,0,0,0.3);
-            margin-bottom:40px;
+        .painel{margin-bottom:30px;}
+
+        input, select{
+            width:100%;
+            padding:14px;
+            margin-bottom:15px;
+            border:none;
+            border-radius:10px;
+            background:#ffe5ee;
+            outline:none;
+            font-size:15px;
         }
 
-        .painel h2{
-            color:#b3003b;
-            margin-bottom:25px;
-            font-size:32px;
+        button{
+            padding:13px 25px;
+            border:none;
+            border-radius:25px;
+            background:#b3003b;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
         }
 
         table{
             width:100%;
             border-collapse:collapse;
+            margin-top:20px;
         }
 
         th{
             background:#5c001f;
             color:white;
-            padding:15px;
+            padding:14px;
             text-align:left;
         }
 
         td{
-            padding:15px;
+            padding:14px;
             border-bottom:1px solid #ddd;
         }
 
-        tr:hover{
-            background:#ffe5ee;
-        }
+        tr:hover{background:#ffe5ee;}
 
-        .tipo{
-            font-weight:bold;
-            color:#b3003b;
-        }
-
-        .status{
-            color:green;
-            font-weight:bold;
-        }
-
-        .resumo{
+        .grid{
             display:grid;
-            grid-template-columns:repeat(3, 1fr);
-            gap:25px;
-            margin-top:25px;
-        }
-
-        .resumo-box{
-            background:#ffe5ee;
-            padding:25px;
-            border-radius:15px;
-            border-left:6px solid #b3003b;
-        }
-
-        .resumo-box h3{
-            margin-bottom:10px;
-            color:#5c001f;
-        }
-
-        .resumo-box p{
-            color:#333;
-            line-height:1.5;
+            grid-template-columns:1fr 1fr;
+            gap:30px;
         }
 
         @media(max-width:900px){
-            .cards,
-            .resumo{
-                grid-template-columns:1fr;
-            }
-
-            header{
-                flex-direction:column;
-                gap:20px;
-            }
+            .grid{grid-template-columns:1fr;}
         }
     </style>
 </head>
@@ -171,36 +132,68 @@
 
 <header>
     <img src="img.png" alt="Logo ESPM">
-
-    <button onclick="logout()">SAIR</button>
+    <button class="logout" onclick="logout()">SAIR</button>
 </header>
 
 <div class="container">
 
-    <h1>Área do Administrador</h1>
-    <p class="subtitulo">Visão geral dos usuários, cursos e desempenho da plataforma.</p>
+    <h1 class="titulo">Área do Administrador</h1>
+    <p class="subtitulo">Gerencie usuários, cursos e certificados da plataforma.</p>
 
     <div class="cards">
-
         <div class="card">
-            <h2>Total de Alunos</h2>
+            <h2>Alunos</h2>
             <p id="totalAlunos">0</p>
         </div>
 
         <div class="card">
-            <h2>Total de Professores</h2>
+            <h2>Professores</h2>
             <p id="totalProfessores">0</p>
         </div>
 
         <div class="card">
-            <h2>Total de Administradores</h2>
-            <p id="totalAdmins">0</p>
+            <h2>Cursos</h2>
+            <p id="totalCursos">0</p>
+        </div>
+
+        <div class="card">
+            <h2>Certificados</h2>
+            <p id="totalCertificados">0</p>
+        </div>
+    </div>
+
+    <div class="grid">
+
+        <div class="painel">
+            <h2>Cadastrar novo curso</h2>
+
+            <input id="tituloCurso" type="text" placeholder="Título do curso">
+            <input id="cargaCurso" type="number" placeholder="Carga horária">
+            <input id="statusCurso" type="text" placeholder="Status" value="APROVADO">
+
+            <button onclick="criarCurso()">CRIAR CURSO</button>
+        </div>
+
+        <div class="painel">
+            <h2>Emitir certificado</h2>
+
+            <select id="alunoCertificado">
+                <option value="">Selecione o aluno</option>
+            </select>
+
+            <select id="cursoCertificado">
+                <option value="">Selecione o curso</option>
+            </select>
+
+            <input id="dataCertificado" type="date">
+            <input id="codigoCertificado" type="text" placeholder="Código de validação">
+
+            <button onclick="criarCertificado()">EMITIR CERTIFICADO</button>
         </div>
 
     </div>
 
     <div class="painel">
-
         <h2>Usuários cadastrados</h2>
 
         <table>
@@ -210,38 +203,44 @@
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Tipo</th>
-                <th>Status</th>
             </tr>
             </thead>
-
             <tbody id="tabelaUsuarios"></tbody>
         </table>
-
     </div>
 
     <div class="painel">
+        <h2>Cursos cadastrados</h2>
 
-        <h2>Resumo dos Cursos</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Carga Horária</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaCursos"></tbody>
+        </table>
+    </div>
 
-        <div class="resumo">
+    <div class="painel">
+        <h2>Certificados emitidos</h2>
 
-            <div class="resumo-box">
-                <h3>Engenharia de Software</h3>
-                <p>Curso ativo na plataforma com alunos aprovados e certificados emitidos.</p>
-            </div>
-
-            <div class="resumo-box">
-                <h3>Python</h3>
-                <p>Curso de programação com foco em lógica, funções e desenvolvimento prático.</p>
-            </div>
-
-            <div class="resumo-box">
-                <h3>SQL</h3>
-                <p>Curso voltado para banco de dados, consultas e manipulação de informações.</p>
-            </div>
-
-        </div>
-
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Aluno</th>
+                <th>Email</th>
+                <th>Curso</th>
+                <th>Data</th>
+                <th>Código</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaCertificados"></tbody>
+        </table>
     </div>
 
 </div>
@@ -254,45 +253,153 @@
         window.location.href = "index.html";
     }
 
-    async function carregarUsuarios() {
-        const resposta = await fetch("/usuarios");
-        const usuarios = await resposta.json();
+    let usuariosGlobais = [];
+    let cursosGlobais = [];
 
-        const tabela = document.getElementById("tabelaUsuarios");
+    async function carregarDashboard() {
+        const respostaUsuarios = await fetch("/usuarios");
+        const usuarios = await respostaUsuarios.json();
 
-        let totalAlunos = 0;
-        let totalProfessores = 0;
-        let totalAdmins = 0;
+        const respostaCursos = await fetch("/cursos");
+        const cursos = await respostaCursos.json();
 
-        tabela.innerHTML = "";
+        const respostaCertificados = await fetch("/certificados");
+        const certificados = await respostaCertificados.json();
+
+        usuariosGlobais = usuarios;
+        cursosGlobais = cursos;
+
+        let alunos = 0;
+        let professores = 0;
+
+        const tabelaUsuarios = document.getElementById("tabelaUsuarios");
+        const tabelaCursos = document.getElementById("tabelaCursos");
+        const tabelaCertificados = document.getElementById("tabelaCertificados");
+        const selectAluno = document.getElementById("alunoCertificado");
+        const selectCurso = document.getElementById("cursoCertificado");
+
+        tabelaUsuarios.innerHTML = "";
+        tabelaCursos.innerHTML = "";
+        tabelaCertificados.innerHTML = "";
+
+        selectAluno.innerHTML = `<option value="">Selecione o aluno</option>`;
+        selectCurso.innerHTML = `<option value="">Selecione o curso</option>`;
 
         usuarios.forEach(usuario => {
             if (usuario.tipo === "ALUNO") {
-                totalAlunos++;
+                alunos++;
+
+                selectAluno.innerHTML += `
+                    <option value="${usuario.email}">
+                        ${usuario.nome} - ${usuario.email}
+                    </option>
+                `;
             }
 
             if (usuario.tipo === "PROFESSOR") {
-                totalProfessores++;
+                professores++;
             }
 
-            if (usuario.tipo === "ADMIN") {
-                totalAdmins++;
-            }
-
-            tabela.innerHTML += `
+            tabelaUsuarios.innerHTML += `
                 <tr>
                     <td>${usuario.id}</td>
                     <td>${usuario.nome}</td>
                     <td>${usuario.email}</td>
-                    <td class="tipo">${usuario.tipo || "SEM TIPO"}</td>
-                    <td class="status">Ativo</td>
+                    <td>${usuario.tipo}</td>
                 </tr>
             `;
         });
 
-        document.getElementById("totalAlunos").innerText = totalAlunos;
-        document.getElementById("totalProfessores").innerText = totalProfessores;
-        document.getElementById("totalAdmins").innerText = totalAdmins;
+        cursos.forEach(curso => {
+            selectCurso.innerHTML += `
+                <option value="${curso.titulo}">
+                    ${curso.titulo}
+                </option>
+            `;
+
+            tabelaCursos.innerHTML += `
+                <tr>
+                    <td>${curso.id}</td>
+                    <td>${curso.titulo}</td>
+                    <td>${curso.cargaHoraria}h</td>
+                    <td>${curso.status}</td>
+                </tr>
+            `;
+        });
+
+        certificados.forEach(certificado => {
+            tabelaCertificados.innerHTML += `
+                <tr>
+                    <td>${certificado.idCertificado}</td>
+                    <td>${certificado.nomeAluno || "-"}</td>
+                    <td>${certificado.emailAluno || "-"}</td>
+                    <td>${certificado.curso || "-"}</td>
+                    <td>${certificado.dataEmissao}</td>
+                    <td>${certificado.codigoValidacao}</td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("totalAlunos").innerText = alunos;
+        document.getElementById("totalProfessores").innerText = professores;
+        document.getElementById("totalCursos").innerText = cursos.length;
+        document.getElementById("totalCertificados").innerText = certificados.length;
+    }
+
+    async function criarCurso() {
+        const titulo = document.getElementById("tituloCurso").value;
+        const cargaHoraria = document.getElementById("cargaCurso").value;
+        const status = document.getElementById("statusCurso").value;
+
+        const resposta = await fetch("/cursos", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                titulo: titulo,
+                cargaHoraria: cargaHoraria,
+                status: status
+            })
+        });
+
+        if (resposta.ok) {
+            alert("Curso criado com sucesso!");
+            carregarDashboard();
+        } else {
+            alert("Erro ao criar curso.");
+        }
+    }
+
+    async function criarCertificado() {
+        const emailAluno = document.getElementById("alunoCertificado").value;
+        const curso = document.getElementById("cursoCertificado").value;
+        const dataEmissao = document.getElementById("dataCertificado").value;
+        const codigoValidacao = document.getElementById("codigoCertificado").value;
+
+        const aluno = usuariosGlobais.find(usuario => usuario.email === emailAluno);
+
+        if (!aluno || !curso || !dataEmissao || !codigoValidacao) {
+            alert("Preencha todos os campos.");
+            return;
+        }
+
+        const resposta = await fetch("/certificados", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                nomeAluno: aluno.nome,
+                emailAluno: aluno.email,
+                curso: curso,
+                dataEmissao: dataEmissao,
+                codigoValidacao: codigoValidacao
+            })
+        });
+
+        if (resposta.ok) {
+            alert("Certificado emitido com sucesso!");
+            carregarDashboard();
+        } else {
+            alert("Erro ao emitir certificado.");
+        }
     }
 
     function logout() {
@@ -300,7 +407,7 @@
         window.location.href = "index.html";
     }
 
-    carregarUsuarios();
+    carregarDashboard();
 </script>
 
 </body>

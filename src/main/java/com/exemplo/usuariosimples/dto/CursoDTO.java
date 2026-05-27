@@ -1,26 +1,12 @@
-package com.exemplo.usuariosimples.domain;
+package com.exemplo.usuariosimples.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "cursos")
-public class Curso {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CursoDTO {
 
     private String titulo;
-
     private int cargaHoraria;
-
     private String status;
 
-    public Curso() {
-    }
-
-    public Long getId() {
-        return id;
+    public CursoDTO() {
     }
 
     public String getTitulo() {
