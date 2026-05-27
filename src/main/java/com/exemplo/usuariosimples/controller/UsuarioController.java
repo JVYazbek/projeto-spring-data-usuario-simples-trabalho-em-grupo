@@ -1,9 +1,12 @@
 package com.exemplo.usuariosimples.controller;
 
 import com.exemplo.usuariosimples.domain.Usuario;
+import com.exemplo.usuariosimples.dto.UsuarioDTO;
 import com.exemplo.usuariosimples.service.UsuarioService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -20,16 +23,32 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public Usuario buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return service.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
     @PostMapping
-    public Usuario criar(@RequestBody Usuario usuario) {
+    public Usuario criar(@RequestBody UsuarioDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTipo(dto.getTipo());
+
         return service.criar(usuario);
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public Usuario atualizar(@PathVariable Long id,
+                             @RequestBody UsuarioDTO dto) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setTipo(dto.getTipo());
+
         return service.atualizar(id, usuario);
     }
 

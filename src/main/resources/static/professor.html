@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Área do Professor</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#b3003b;
+            min-height:100vh;
+            color:#5c001f;
+        }
+
+        header{
+            background:#5c001f;
+            color:white;
+            padding:25px 60px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        header img{
+            width:120px;
+        }
+
+        header button{
+            padding:12px 25px;
+            border-radius:25px;
+            border:2px solid white;
+            background:transparent;
+            color:white;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .container{
+            padding:50px;
+        }
+
+        h1{
+            color:white;
+            font-size:42px;
+            margin-bottom:10px;
+        }
+
+        .subtitulo{
+            color:#ffe5ee;
+            margin-bottom:40px;
+            font-size:20px;
+        }
+
+        .alunos{
+            display:grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap:25px;
+        }
+
+        .card{
+            background:#ffe5ee;
+            border-radius:20px;
+            padding:30px;
+            box-shadow:0 10px 25px rgba(0,0,0,0.25);
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+        }
+
+        .card h2{
+            margin-bottom:10px;
+            color:#5c001f;
+        }
+
+        .card p{
+            color:#333;
+        }
+
+        .boletim{
+            display:none;
+            margin-top:40px;
+            background:white;
+            border-radius:20px;
+            padding:40px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .boletim h2{
+            color:#b3003b;
+            margin-bottom:25px;
+            font-size:32px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        th{
+            background:#5c001f;
+            color:white;
+            padding:15px;
+            text-align:left;
+        }
+
+        td{
+            padding:15px;
+            border-bottom:1px solid #ddd;
+        }
+
+        tr:hover{
+            background:#ffe5ee;
+        }
+
+        .aprovado{
+            color:green;
+            font-weight:bold;
+        }
+
+        .recado{
+            margin-top:30px;
+            background:#ffe5ee;
+            padding:20px;
+            border-left:6px solid #b3003b;
+            border-radius:10px;
+            font-size:18px;
+        }
+
+        @media(max-width:900px){
+            .alunos{
+                grid-template-columns:1fr;
+            }
+
+            header{
+                flex-direction:column;
+                gap:20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="img.png" alt="Logo ESPM">
+    <button onclick="logout()">SAIR</button>
+</header>
+
+<div class="container">
+
+    <h1>Área do Professor</h1>
+    <p class="subtitulo">Selecione um aluno para visualizar suas notas e desempenho.</p>
+
+    <div class="alunos" id="listaAlunos"></div>
+
+    <div class="boletim" id="boletim">
+
+        <h2 id="nomeAluno">Notas do aluno</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Matéria</th>
+                <th>Nota</th>
+                <th>Status</th>
+                <th>Recado</th>
+            </tr>
+            </thead>
+
+            <tbody id="tabelaNotas"></tbody>
+        </table>
+
+        <div class="recado" id="recadoFinal"></div>
+
+    </div>
+
+</div>
+
+<script>
+    const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
+
+    if (!usuarioLogado || usuarioLogado.tipo !== "PROFESSOR") {
+        alert("Acesso negado!");
+        window.location.href = "index.html";
+    }
+
+    async function carregarAlunos() {
+        const resposta = await fetch("/usuarios");
+        const usuarios = await resposta.json();
+
+        const alunos = usuarios.filter(usuario => usuario.tipo === "ALUNO");
+        const lista = document.getElementById("listaAlunos");
+
+        lista.innerHTML = "";
+
+        alunos.forEach(aluno => {
+            lista.innerHTML += `
+                <div class="card" onclick="mostrarNotas('${aluno.nome}')">
+                    <h2>${aluno.nome}</h2>
+                    <p>${aluno.email}</p>
+                    <p>Aluno cadastrado na trilha de programação.</p>
+                </div>
+            `;
+        });
+    }
+
+    function gerarNotas(nome) {
+        return [
+            {
+                materia: "Engenharia de Software",
+                nota: 8.5,
+                recado: nome + " foi aprovado com bom desempenho em Engenharia de Software."
+            },
+            {
+                materia: "Python",
+                nota: 9.0,
+                recado: nome + " foi aprovado com ótimo domínio em lógica de programação com Python."
+            },
+            {
+                materia: "SQL",
+                nota: 8.8,
+                recado: nome + " foi aprovado com bom desempenho em banco de dados e consultas SQL."
+            }
+        ];
+    }
+
+    function mostrarNotas(nome) {
+        const boletim = document.getElementById("boletim");
+        const nomeAluno = document.getElementById("nomeAluno");
+        const tabela = document.getElementById("tabelaNotas");
+        const recadoFinal = document.getElementById("recadoFinal");
+
+        const notas = gerarNotas(nome);
+
+        nomeAluno.innerText = "Notas de " + nome;
+        tabela.innerHTML = "";
+
+        notas.forEach(item => {
+            tabela.innerHTML += `
+                <tr>
+                    <td>${item.materia}</td>
+                    <td>${item.nota}</td>
+                    <td class="aprovado">Aprovado</td>
+                    <td>${item.recado}</td>
+                </tr>
+            `;
+        });
+
+        recadoFinal.innerText = nome + " foi aprovado em todas as matérias da trilha de programação.";
+
+        boletim.style.display = "block";
+
+        boletim.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+
+    function logout() {
+        localStorage.removeItem("usuarioLogado");
+        window.location.href = "index.html";
+    }
+
+    carregarAlunos();
+</script>
+
+</body>
+</html>

@@ -36,4 +36,8 @@ public class UsuarioService {
     public void deletar(Long id) {
         repository.deleteById(id);
     }
+
+    public Optional<Usuario> login(String nome, String email) {
+        return repository.findByNomeAndEmail(nome, email);
+    }
 }
