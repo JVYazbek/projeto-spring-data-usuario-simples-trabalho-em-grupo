@@ -1,9 +1,18 @@
 package com.exemplo.usuariosimples.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "certificados")
 public class Certificado {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCertificado;
     private String dataEmissao;
+    private String nomeAluno;
+    private String emailAluno;
+    private String curso;
     private String codigoValidacao;
 
     public Certificado() {
@@ -39,7 +48,27 @@ public class Certificado {
         this.codigoValidacao = codigoValidacao;
     }
 
-    public void emitir() {
-        System.out.println("Certificado emitido");
+    public String getNomeAluno() {
+        return nomeAluno;
+    }
+
+    public void setNomeAluno(String nomeAluno) {
+        this.nomeAluno = nomeAluno;
+    }
+
+    public String getEmailAluno() {
+        return emailAluno;
+    }
+
+    public void setEmailAluno(String emailAluno) {
+        this.emailAluno = emailAluno;
+    }
+
+    public String getCurso() {
+        return curso;
+    }
+
+    public void setCurso(String curso) {
+        this.curso = curso;
     }
 }

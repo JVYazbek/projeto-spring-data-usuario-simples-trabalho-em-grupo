@@ -7,6 +7,7 @@
     <title>Login ESPM</title>
 
     <style>
+
         *{
             margin:0;
             padding:0;
@@ -59,7 +60,6 @@
         .left p{
             font-size:18px;
             line-height:1.5;
-            margin-bottom:30px;
         }
 
         .right{
@@ -103,7 +103,7 @@
             box-shadow:0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .btn-cadastrar{
+        .btn{
             width:220px;
             padding:15px;
             border:none;
@@ -115,7 +115,7 @@
             transition:0.3s;
         }
 
-        .btn-cadastrar:hover{
+        .btn:hover{
             background:#8a002e;
         }
 
@@ -130,7 +130,9 @@
         .criar-conta:hover{
             text-decoration:underline;
         }
+
     </style>
+
 </head>
 
 <body>
@@ -138,6 +140,7 @@
 <div class="container">
 
     <div class="left">
+
         <div class="logo">
             <img src="img.png" alt="Logo ESPM">
         </div>
@@ -148,74 +151,123 @@
             Faça login com seu nome e email cadastrados.
             Caso ainda não tenha conta, crie uma agora mesmo.
         </p>
+
     </div>
 
     <div class="right">
+
         <div class="form-box">
 
             <h1>Login</h1>
 
-            <p>Digite seu nome e email</p>
+            <p>
+                Digite seu nome e email
+            </p>
 
             <form onsubmit="entrar(event)">
+
                 <div class="input-group">
-                    <input id="nome" type="text" placeholder="Nome" required>
+                    <input
+                            id="nome"
+                            type="text"
+                            placeholder="Nome"
+                            required
+                    >
                 </div>
 
                 <div class="input-group">
-                    <input id="email" type="email" placeholder="Email" required>
+                    <input
+                            id="email"
+                            type="email"
+                            placeholder="Email"
+                            required
+                    >
                 </div>
 
-                <button type="submit" class="btn-cadastrar">
+                <button type="submit" class="btn">
                     ACESSAR
                 </button>
+
             </form>
 
-            <div class="criar-conta" onclick="window.location.href='cadastro.html'">
+            <div class="criar-conta"
+                 onclick="window.location.href='cadastro.html'">
+
                 Criar nova conta
+
             </div>
 
         </div>
+
     </div>
 
 </div>
 
 <script>
+
     async function entrar(event) {
+
         event.preventDefault();
 
         const nome = document.getElementById("nome").value;
         const email = document.getElementById("email").value;
 
-        const resposta = await fetch("/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nome: nome,
-                email: email
-            })
-        });
+        try {
 
-        if (!resposta.ok) {
-            alert("Usuário não encontrado!");
-            return;
-        }
+            const resposta = await fetch("/login", {
 
-        const usuario = await resposta.json();
+                method: "POST",
 
-        localStorage.setItem("usuarioLogado", JSON.stringify(usuario));
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        if (usuario.tipo === "ADMIN") {
-            window.location.href = "admin.html";
-        } else if (usuario.tipo === "PROFESSOR") {
-            window.location.href = "professor.html";
-        } else if (usuario.tipo === "ALUNO") {
-            window.location.href = "aluno.html";
-        } else {
-            alert("Tipo de usuário não definido!");
+                body: JSON.stringify({
+                    nome: nome,
+                    email: email
+                })
+            });
+
+            if (!resposta.ok) {
+
+                alert("Usuário não encontrado!");
+                return;
+            }
+
+            const usuario = await resposta.json();
+
+            localStorage.setItem(
+                "usuarioLogado",
+                JSON.stringify(usuario)
+            );
+
+            if (usuario.tipo === "ADMIN") {
+
+                window.location.href = "admin.html";
+
+            } else if (usuario.tipo === "PROFESSOR") {
+
+                window.location.href = "professor.html";
+
+            } else if (usuario.tipo === "ALUNO") {
+
+                window.location.href = "aluno.html";
+
+            } else {
+
+                alert("Tipo de usuário inválido!");
+            }
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            alert("Erro ao conectar com o servidor.");
         }
     }
+
 </script>
+
 </body>
+
+</html>

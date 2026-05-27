@@ -1,28 +1,26 @@
 package com.exemplo.usuariosimples.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "cursos")
 public class Curso {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String titulo;
+
     private int cargaHoraria;
+
     private String status;
 
     public Curso() {
     }
 
-    public Curso(Long id, String titulo, int cargaHoraria, String status) {
-        this.id = id;
-        this.titulo = titulo;
-        this.cargaHoraria = cargaHoraria;
-        this.status = status;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTitulo() {

@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Área do Aluno</title>
 
     <style>
@@ -9,71 +10,69 @@
             margin:0;
             padding:0;
             box-sizing:border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family:Arial, Helvetica, sans-serif;
         }
 
         body{
             background:#b3003b;
             min-height:100vh;
-            color:#5c001f;
         }
 
         header{
+            width:100%;
             background:#5c001f;
-            color:white;
-            padding:25px 60px;
+            padding:20px 50px;
             display:flex;
             justify-content:space-between;
             align-items:center;
         }
 
         header img{
-            width:120px;
+            width:140px;
         }
 
-        header button{
+        .logout{
             padding:12px 25px;
-            border-radius:25px;
-            border:2px solid white;
-            background:transparent;
-            color:white;
-            cursor:pointer;
+            border:none;
+            border-radius:30px;
+            background:white;
+            color:#5c001f;
             font-weight:bold;
+            cursor:pointer;
         }
 
         .container{
             padding:50px;
         }
 
-        h1{
+        .titulo{
             color:white;
-            font-size:42px;
             margin-bottom:10px;
+            font-size:42px;
         }
 
         .subtitulo{
             color:#ffe5ee;
             margin-bottom:40px;
-            font-size:20px;
+            font-size:18px;
         }
 
         .cards{
             display:grid;
-            grid-template-columns:repeat(3, 1fr);
+            grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
             gap:25px;
         }
 
         .card{
-            background:#ffe5ee;
+            background:white;
             border-radius:20px;
             padding:30px;
-            box-shadow:0 10px 25px rgba(0,0,0,0.25);
-            cursor:pointer;
+            box-shadow:0 10px 20px rgba(0,0,0,0.2);
             transition:0.3s;
         }
 
         .card:hover{
-            transform:translateY(-8px);
+            transform:translateY(-5px);
         }
 
         .card h2{
@@ -82,68 +81,65 @@
         }
 
         .card p{
-            color:#333;
-            line-height:1.5;
+            color:#555;
+            margin-bottom:10px;
+        }
+
+        .status{
+            color:green;
+            font-weight:bold;
         }
 
         .certificado{
+            margin-top:20px;
+            padding:12px;
+            border:none;
+            border-radius:12px;
+            background:#b3003b;
+            color:white;
+            cursor:pointer;
+            width:100%;
+            font-weight:bold;
+        }
+
+        .modal{
             display:none;
-            margin-top:40px;
-            background:#fff;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.7);
+            justify-content:center;
+            align-items:center;
+        }
+
+        .modal-content{
+            background:white;
+            width:700px;
             border-radius:20px;
-            padding:50px;
+            padding:40px;
             text-align:center;
-            box-shadow:0 10px 30px rgba(0,0,0,0.3);
-            border:8px solid #5c001f;
         }
 
-        .certificado img{
-            width:140px;
-            margin-bottom:20px;
-        }
-
-        .certificado h2{
-            font-size:36px;
-            color:#b3003b;
-            margin-bottom:20px;
-        }
-
-        .certificado p{
-            font-size:20px;
-            margin-bottom:15px;
-        }
-
-        .nomeAluno{
-            font-size:30px;
-            font-weight:bold;
+        .modal-content h1{
             color:#5c001f;
-            margin:20px 0;
+            margin-bottom:20px;
         }
 
-        .materiaCertificado{
-            font-size:28px;
-            color:#b3003b;
-            font-weight:bold;
+        .modal-content p{
+            margin-bottom:15px;
+            font-size:18px;
         }
 
-        .assinatura{
-            margin-top:40px;
-            border-top:2px solid #5c001f;
-            width:300px;
-            margin-left:auto;
-            margin-right:auto;
-            padding-top:10px;
-        }
-
-        @media(max-width:900px){
-            .cards{
-                grid-template-columns:1fr;
-            }
-
-            header{
-                flex-direction:column;
-                gap:20px;
-            }
+        .fechar{
+            margin-top:20px;
+            padding:12px 25px;
+            border:none;
+            border-radius:30px;
+            background:#b3003b;
+            color:white;
+            cursor:pointer;
         }
     </style>
 </head>
@@ -153,58 +149,55 @@
 <header>
     <img src="img.png" alt="Logo ESPM">
 
-    <button onclick="logout()">SAIR</button>
+    <button class="logout" onclick="logout()">
+        SAIR
+    </button>
 </header>
 
 <div class="container">
 
-    <h1>Área do Aluno</h1>
-    <p class="subtitulo">Escolha uma matéria para visualizar seu certificado de aprovação.</p>
+    <h1 class="titulo">Área do Aluno</h1>
 
-    <div class="cards">
+    <p class="subtitulo">
+        Visualize seus cursos e certificados.
+    </p>
 
-        <div class="card" onclick="mostrarCertificado('Engenharia de Software')">
-            <h2>Engenharia de Software</h2>
-            <p>Aprenda análise, projeto, requisitos, documentação e desenvolvimento de sistemas.</p>
-        </div>
+    <div class="cards" id="listaCursos"></div>
 
-        <div class="card" onclick="mostrarCertificado('Python')">
-            <h2>Python</h2>
-            <p>Estude lógica de programação, estruturas, funções e aplicações práticas com Python.</p>
-        </div>
+</div>
 
-        <div class="card" onclick="mostrarCertificado('SQL')">
-            <h2>SQL</h2>
-            <p>Aprenda banco de dados, consultas, tabelas, filtros e manipulação de dados.</p>
-        </div>
+<div class="modal" id="modal">
 
-    </div>
+    <div class="modal-content">
 
-    <div class="certificado" id="certificado">
+        <h1>Certificado de Aprovação</h1>
 
-        <img src="img.png" alt="Logo ESPM">
+        <p>
+            Certificamos que o aluno:
+        </p>
 
-        <h2>Certificado de Aprovação</h2>
+        <p id="nomeAluno"></p>
 
-        <p>Certificamos que o aluno</p>
+        <p>
+            concluiu com sucesso o curso:
+        </p>
 
-        <div class="nomeAluno" id="nomeAluno">Aluno</div>
+        <p id="nomeCurso"></p>
 
-        <p>foi aprovado com sucesso na matéria</p>
+        <p id="codigoCertificado"></p>
 
-        <div class="materiaCertificado" id="materiaCertificado"></div>
+        <p id="dataCertificado"></p>
 
-        <p>com excelente desempenho acadêmico.</p>
-
-        <div class="assinatura">
-            Coordenação Acadêmica ESPM
-        </div>
+        <button class="fechar" onclick="fecharModal()">
+            FECHAR
+        </button>
 
     </div>
 
 </div>
 
 <script>
+
     const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado"));
 
     if (!usuarioLogado || usuarioLogado.tipo !== "ALUNO") {
@@ -212,20 +205,81 @@
         window.location.href = "index.html";
     }
 
-    function mostrarCertificado(materia) {
-        document.getElementById("certificado").style.display = "block";
-        document.getElementById("nomeAluno").innerText = usuarioLogado.nome;
-        document.getElementById("materiaCertificado").innerText = materia;
+    async function carregarCursos() {
 
-        document.getElementById("certificado").scrollIntoView({
-            behavior: "smooth"
+        const respostaCursos = await fetch("/cursos");
+        const cursos = await respostaCursos.json();
+
+        const respostaCertificados = await fetch("/certificados");
+        const certificados = await respostaCertificados.json();
+
+        const lista = document.getElementById("listaCursos");
+
+        lista.innerHTML = "";
+
+        cursos.forEach((curso, index) => {
+
+            const certificado = certificados[index];
+
+            lista.innerHTML += `
+                <div class="card">
+
+                    <h2>${curso.titulo}</h2>
+
+                    <p>
+                        <strong>Carga horária:</strong>
+                        ${curso.cargaHoraria} horas
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="status">${curso.status}</span>
+                    </p>
+
+                    <button class="certificado"
+                        onclick='abrirCertificado(
+                            "${curso.titulo}",
+                            "${certificado.codigoValidacao}",
+                            "${certificado.dataEmissao}"
+                        )'>
+
+                        VER CERTIFICADO
+
+                    </button>
+
+                </div>
+            `;
         });
+    }
+
+    function abrirCertificado(curso, codigo, data) {
+
+        document.getElementById("modal").style.display = "flex";
+
+        document.getElementById("nomeAluno").innerHTML =
+            "<strong>" + usuarioLogado.nome + "</strong>";
+
+        document.getElementById("nomeCurso").innerHTML =
+            "<strong>" + curso + "</strong>";
+
+        document.getElementById("codigoCertificado").innerHTML =
+            "Código de validação: <strong>" + codigo + "</strong>";
+
+        document.getElementById("dataCertificado").innerHTML =
+            "Data de emissão: <strong>" + data + "</strong>";
+    }
+
+    function fecharModal() {
+        document.getElementById("modal").style.display = "none";
     }
 
     function logout() {
         localStorage.removeItem("usuarioLogado");
         window.location.href = "index.html";
     }
+
+    carregarCursos();
+
 </script>
 
 </body>
